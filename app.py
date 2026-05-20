@@ -4,6 +4,12 @@ from PIL import Image
 import google.generativeai as genai
 from gtts import gTTS
 
+import os
+
+#streamlit cloud ku tesseract path ah sollurathu
+if os.path.exists("/usr/bin/tesseract"):
+    pytesseract.pytesseract.tesseract_cmd='/usr/bin/tesseract'
+
 #====1.page config====
 st.set_page_config(
     page_title="Tamil Health Buddy",
