@@ -1,13 +1,17 @@
 import streamlit as st
-import pytesseract
+import easyocr
 from PIL import Image
 import google.generativeai as genai
 from gtts import gTTS
 
 import os
 
-#streamlit cloud ku tesseract path ah sollurathu
-pytesseract.pytesseract.tesseract_cmd='/usr/bin/tesseract'
+#ocr
+@st.cache_resource
+def load_ocr():
+    return easyocr.Reader(['en','ta'])
+
+reader=load_ocr()
 
 #====1.page config====
 st.set_page_config(
@@ -33,9 +37,6 @@ st.markdown("""
 st.title("Tamil Health Buddy")
 st.caption("Blood report ah upload pannu,Tamil la kekalam")
 
-    
-pytesseract.pytesseract.tesseract_cmd=r'C:\Program Files\tesseract-OCR\tesseract.exe'
-
 #1.Gemini API Key setup-https://aistudio.google.com/app/apikey la vaangunathu
 genai.configure(api_key="AIzaSyAQU6VkXYuwdkff8L4buS27o7F2c5QTLGc")
 
@@ -59,7 +60,7 @@ if uploaded_file:
 
     #2.OCR-Image la irunthu text edukurathu
     with st.spinner('Report ah padikuren...'):
-        extracted_text=pytesseract.image_to_string(img)
+        extracted_text=" ".join(result)
 
     if extracted_text.strip():
         st.subheader("report la irunthu edutha text:")
