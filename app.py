@@ -60,7 +60,8 @@ if uploaded_file:
 
     #2.OCR-Image la irunthu text edukurathu
     with st.spinner('Report ah padikuren...'):
-        extracted_text=" ".join(result)
+        result=reader.readtext(img)
+        extracted_text=" ".join([res[1] for res in result])
 
     if extracted_text.strip():
         st.subheader("report la irunthu edutha text:")
