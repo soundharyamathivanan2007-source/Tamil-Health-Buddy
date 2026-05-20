@@ -9,7 +9,7 @@ import os
 #ocr
 @st.cache_resource
 def load_ocr():
-    return easyocr.Reader(['en','ta'],gpu=False,verbose=False,download_enabled=True,model_storage_directory='./')
+    return easyocr.Reader(['en'],gpu=False,quantize=False,model_storage_directory='./models')
 
 reader=load_ocr()
 
