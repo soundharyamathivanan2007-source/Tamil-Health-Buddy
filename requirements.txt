@@ -1,6 +1,8 @@
 streamlit
-pytesseract
 pillow
 pandas
 google-generativeai
 gTTS
+easyocr
+torch
+torchvision
