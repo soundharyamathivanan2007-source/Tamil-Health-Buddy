@@ -38,7 +38,7 @@ st.title("Tamil Health Buddy")
 st.caption("Blood report ah upload pannu,Tamil la kekalam")
 
 #1.Gemini API Key setup-https://aistudio.google.com/app/apikey la vaangunathu
-genai.configure(api_key=st.secret["GOOGLE_API_KEY"])
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 #safety settings
 safety_settings=[
