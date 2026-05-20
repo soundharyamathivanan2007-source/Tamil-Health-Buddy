@@ -1,6 +1,5 @@
 streamlit
 pillow
-pandas
 google-generativeai
 gTTS
 easyocr
