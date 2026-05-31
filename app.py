@@ -6,6 +6,24 @@ from gtts import gTTS
 
 import os
 
+#====1.page config====
+st.set_page_config(
+    page_title="Tamil Health Buddy",
+    page_icon="🩺",
+    layout="centered"
+)
+
+#====GEMINI API KEY-SAFE CONFIG====
+try:
+    api_key=st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=api_key)
+except KeyError:
+    st.error("GEMINI_API_KEY not found. streamlit cloud secrets la add pannunga.")
+    st.stop()
+except Exception as e:
+    st.error(f"API Key error:{e}")
+    st.stop()
+
 #ocr
 @st.cache_resource
 def load_ocr():
@@ -13,12 +31,7 @@ def load_ocr():
 
 reader=load_ocr()
 
-#====1.page config====
-st.set_page_config(
-    page_title="Tamil Health Buddy",
-    page_icon="🩺",
-    layout="centered"
-)
+
 #====2.BIG BUTTON CSS- MELA POTTALEY POTHUM====
 st.markdown("""
 <style>
