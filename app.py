@@ -73,7 +73,7 @@ if uploaded_file:
 
     #2.OCR-Image la irunthu text edukurathu
     with st.spinner('Report ah padikuren...'):
-        result=reader.readtext(img)
+        result=reader.readtext(np.array(img))
         extracted_text=" ".join([res[1] for res in result])
 
     if extracted_text.strip():
