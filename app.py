@@ -19,7 +19,7 @@ try:
     api_key=st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
 except KeyError:
-    st.error("GEMINI_API_KEY not found. streamlit cloud secrets la add pannunga.")
+    st.error("GEMINI_API_KEY not found. please add it in streamlit cloud secrets.")
     st.stop()
 except Exception as e:
     st.error(f"API Key error:{e}")
@@ -49,7 +49,7 @@ st.markdown("""
 
 #===3.title===
 st.title("Tamil Health Buddy")
-st.caption("Blood report ah upload pannu,Tamil la kekalam")
+st.caption("Upload your blood report and listen to the explanation in tamil")
 
 #1.Gemini API Key setup-https://aistudio.google.com/app/apikey la vaangunathu
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
@@ -64,44 +64,44 @@ safety_settings=[
 model=genai.GenerativeModel('gemini-2.5-flash')
 
 st.title("Tamil Medical Report Explainer")
-st.write("ungaloda blood report ah upload pannunga.simple tamil la puriya vachudalam.")
+st.write("please upload your blood report. I will explain it in simple tamil.")
 
-uploaded_file=st.file_uploader("Report Upload Pannunga",type=["png","jpg","jpeg","pdf"])
+uploaded_file=st.file_uploader("Upload Report",type=["png","jpg","jpeg","pdf"])
 
 if uploaded_file:
     img=Image.open(uploaded_file)
-    st.image(img,caption="neenga upload panna report",width=300)
+    st.image(img,caption="your uploaded report",width=300)
 
-    #2.OCR-Image la irunthu text edukurathu
-    with st.spinner('Report ah padikuren...'):
+    #2.OCR-Extracting text your images
+    with st.spinner('Reading report...'):
         result=reader.readtext(np.array(img))
         extracted_text=" ".join([res[1] for res in result])
 
     if extracted_text.strip():
-        st.subheader("report la irunthu edutha text:")
+        st.subheader("Extracted text from report:")
         st.text(extracted_text[:500]+"...")
 
-        #3.AI ku anuppi tamil la explain kekurathu
+        #3.sending to AI to explain in tamil
         prompt=f"""
-nee oru udhaviyana medical assistant.intha blood report text ah paathu,normal manushangaluku puriyura maari simple tamil la explain pannu.
+you are a helpful medical assistant.Read this blood report text and explain it in simple tamil that normal people can understand.
 Rules:
-1.medical terms ah tamil paduthu.hemoglobin=Ratha sogai
-2.edhu normal range,edhu kammi/jaasthi nu sollu
-3.bayamuruthaatha,aanal nallathuku sonna kelunga nu sollu
-4.kadasiya:"idhu doctor advice illa,unmaiyana advice ku doctor ah parunga"nu kandippa podu
+1.Translate medical terms to tamil.example:hemoglobin=Ratha sogai.
+2.Tell what is normal range,what is low/high.
+3.Tell if it is concerning,but also tell what to do for better health.
+4.Finally must add:"This is not a doctor's advice, please consult a doctor for actual advice".
 
 Report Text:
 {extracted_text}
 """
-        with st.spinner('AI Doctor Tamil la explain pandran...'):
+        with st.spinner('AI Doctor is Explaining in Tamil...'):
             response=model.generate_content(prompt)
             report_text=response.text
             st.markdown(report_text)
             
         
-            st.markdown("### audio va kekalam")
+            st.markdown("### Listen to Audio")
             if st.button("Generate Audio Report"):
-                with st.spinner("Google Tamil Voice generate aagudhu...15 sec wait pannu"):
+                with st.spinner("Generating Google Tamil Voice....Please wait 15 sec"):
 
                     try:
                          from gtts import gTTS
@@ -113,13 +113,13 @@ Report Text:
                          tts.save(audio_file)
 
                          st.audio(audio_file,format='audio/mp3')
-                         st.success("vanthuruchi!! play button ah thattu,tamil la pesum")
+                         st.success("Ready! Click the play Button to listen in tamil.")
 
                         
                     except Exception as e:
                          st.error(f"audio Error:{e}")
-                         st.info("Net connection iruka nu check pannu.gTTS ku net venum.")
+                         st.info("Please check your internet connection.gTTS requires internet.")
     else:
-        st.error("Image la text ah read panna mudiyala.thelivana photo upload pannu.")
+        st.error("Could not read text from the image.please upload a clear photo.")
 
           
